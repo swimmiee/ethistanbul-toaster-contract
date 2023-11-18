@@ -16,7 +16,7 @@ import {IToasterStrategy} from "../interfaces/IToasterStrategy.sol";
 import {IAggregatorProtocol} from "../external/oneinch/interface/IAggregatorProtocol.sol";
 import {IZapCalculator} from "../interfaces/IZapCalculator.sol";
 
-import "hardhat/console.sol";
+
 struct SwapCallbackData {
     bytes path;
     address payer;
@@ -45,7 +45,7 @@ contract ToasterPool is
     IZapCalculator public immutable zapCalculator;
     IToasterStrategy public immutable strategy;
     address public immutable _1inch;
-    uint public period; // default 100 blocks
+    
     mapping(address => uint128) userShare;
     mapping(address => mapping(address => uint)) public balances;
     bool public override locked;
@@ -71,7 +71,6 @@ contract ToasterPool is
         zapCalculator = IZapCalculator(_zapCalculator);
         _1inch = __1inch;
         strategy = IToasterStrategy(_strategy);
-        period = 100;
         positionManager = INonfungiblePositionManager(_positionManager);
         pool = IUniswapV3Pool(_pool);
         token0 = IERC20(IUniswapV3Pool(_pool).token0());
