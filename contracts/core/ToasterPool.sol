@@ -3,17 +3,14 @@ pragma solidity 0.7.5;
 pragma abicoder v2;
 import {IUniswapV3Pool} from "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import {INonfungiblePositionManager} from "@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol";
-import {PositionValue} from "@uniswap/v3-periphery/contracts/libraries/PositionValue.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 import {IPostInteractionNotificationReceiver} from "../external/oneinch/IPostInteractionNotificationReceiver.sol";
 
-import {IToasterPoolDeployer} from "../interfaces/IToasterPoolDeployer.sol";
 import {IToasterPool} from "../interfaces/IToasterPool.sol";
 import {IToasterStrategy} from "../interfaces/IToasterStrategy.sol";
-import {IAggregatorProtocol} from "../external/oneinch/interface/IAggregatorProtocol.sol";
 import {IZapCalculator} from "../interfaces/IZapCalculator.sol";
 
 
@@ -164,7 +161,7 @@ contract ToasterPool is
         PoolState memory s = state;
         require(s.tokenId != 0, "NOL");
         // collect fees and reinvest
-        reinvest();
+        // reinvest();
         uint reserve0 = IERC20(token0).balanceOf(address(this));
         uint reserve1 = IERC20(token1).balanceOf(address(this));
         (amount0, amount1) = zap(s.tickLower, s.tickUpper, reserve0, reserve1);
