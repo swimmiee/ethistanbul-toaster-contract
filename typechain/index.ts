@@ -150,10 +150,6 @@ export type { IPreInteractionNotificationReceiver } from "./contracts/external/o
 export { IPreInteractionNotificationReceiver__factory } from "./factories/contracts/external/oneinch/IPreInteractionNotificationReceiver__factory";
 export type { IToasterPool } from "./contracts/interfaces/IToasterPool";
 export { IToasterPool__factory } from "./factories/contracts/interfaces/IToasterPool__factory";
-export type { IToasterPoolDeployer } from "./contracts/interfaces/IToasterPoolDeployer";
-export { IToasterPoolDeployer__factory } from "./factories/contracts/interfaces/IToasterPoolDeployer__factory";
-export type { IToasterRouter } from "./contracts/interfaces/IToasterRouter";
-export { IToasterRouter__factory } from "./factories/contracts/interfaces/IToasterRouter__factory";
 export type { IZapCalculator } from "./contracts/interfaces/IZapCalculator";
 export { IZapCalculator__factory } from "./factories/contracts/interfaces/IZapCalculator__factory";
 export type { WETH9 } from "./contracts/mock/WETH.sol/WETH9";

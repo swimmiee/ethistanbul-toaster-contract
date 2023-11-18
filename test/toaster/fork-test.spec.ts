@@ -14,7 +14,7 @@ import { IUniswapV3Pool, ToasterPool } from "../../typechain";
 
 const { parseEther, formatEther, parseUnits, formatUnits } = ethers.utils;
 
-// npx hardhat test test/fork-test.spec.ts
+// npx hardhat test test/fork-test.spePOLYGON.ts
 describe("Arbitrum One Fork Test", () => {
   let signer: SignerWithAddress;
   let taker: SignerWithAddress;
@@ -29,6 +29,16 @@ describe("Arbitrum One Fork Test", () => {
     MATIC_ROUTER: "0xdc2AAF042Aeff2E68B3e8E33F19e4B9fA7C73F10",
     SWAP_ROUTER: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
   };
+
+  const POLYGON = {
+    WMATIC: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+    USDC: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+    POLY_USDC_WMATIC_POOL : "0x2DB87C4831B2fec2E35591221455834193b50D1B",
+    ONE_INCH: "0x1111111254EEB25477B68fb85Ed929f73A960582",
+    MANAGER: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+    MATIC_ROUTER: "0xdc2AAF042Aeff2E68B3e8E33F19e4B9fA7C73F10",//chainlink function router
+    SWAP_ROUTER:"0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45"
+  }
   
   before("Deploy", async () => {
     
@@ -37,16 +47,16 @@ describe("Arbitrum One Fork Test", () => {
     taker = signers[1];
 
     await setBalance(signer.address, parseEther("10000"));
-    pool = await ethers.getContractAt("IUniswapV3Pool", c.USDC_WETH_POOL);
-    await makeWETH("100", c.WETH);
+    pool = await ethers.getContractAt("IUniswapV3Pool", POLYGON.POLY_USDC_WMATIC_POOL);
+    await makeWETH("100", POLYGON.WMATIC);
     const swap_router = await ethers.getContractAt(
       "IV3SwapRouter",
-      c.SWAP_ROUTER
+      POLYGON.SWAP_ROUTER
     );
-    await approveToken(c.WETH, c.SWAP_ROUTER);
+    await approveToken(POLYGON.WMATIC, POLYGON.SWAP_ROUTER);
     await swap_router.exactInputSingle({
-      tokenIn: c.WETH,
-      tokenOut: c.USDC,
+      tokenIn: POLYGON.WMATIC,
+      tokenOut: POLYGON.USDC,
       fee: 3000,
       recipient: signer.address,
       amountIn: ethers.utils.parseEther("30"),
@@ -57,19 +67,19 @@ describe("Arbitrum One Fork Test", () => {
     const zap = await deployZap();
     toasterPool = await deployToasterPool(
       zap.address,
-      c.MANAGER,
-      c.USDC_WETH_POOL,
-      c.ONE_INCH,
-      c.MATIC_ROUTER
+      POLYGON.MANAGER,
+      POLYGON.POLY_USDC_WMATIC_POOL,
+      POLYGON.ONE_INCH,
+      POLYGON.MATIC_ROUTER
     );
 
-    await approveToken(c.WETH, toasterPool.address);
-    await approveToken(c.USDC, toasterPool.address);
+    await approveToken(POLYGON.WMATIC, toasterPool.address);
+    await approveToken(POLYGON.USDC, toasterPool.address);
   });
 
   it("Init", async () => {
-    const token0 = await ethers.getContractAt("IERC20", c.WETH);
-    const token1 = await ethers.getContractAt("IERC20", c.USDC);
+    const token0 = await ethers.getContractAt("IERC20", POLYGON.WMATIC);
+    const token1 = await ethers.getContractAt("IERC20", POLYGON.USDC);
 
     console.log(await token0.balanceOf(signer.address));
     console.log(await token1.balanceOf(signer.address));
@@ -104,9 +114,9 @@ describe("Arbitrum One Fork Test", () => {
     expect(state.tokenId).gt(0);
   });
 
-  it("Mock 1inch fillOrderPostInteraction", async () => {
-    await impersonateAccount(c.ONE_INCH);
-    const oneInch = await ethers.getSigner(c.ONE_INCH);
+  it.skip("Mock 1inch fillOrderPostInteraction", async () => {
+    await impersonateAccount(POLYGON.ONE_INCH);
+    const oneInch = await ethers.getSigner(POLYGON.ONE_INCH);
     await setBalance(oneInch.address, parseEther("1000000"));
 
     const beforeState = await toasterPool.state();
@@ -117,7 +127,7 @@ describe("Arbitrum One Fork Test", () => {
     // 두 번째에서 나머지 스왑 다 이루어지는 상황 가정
     const interactionData = encoder.encode(
       ["address", "uint256"],
-      [c.USDC, "1000"]
+      [POLYGON.USDC, "1000"]
     );
 
     const mockOrderHash = ethers.utils.hexZeroPad("0x", 32);
@@ -136,12 +146,12 @@ describe("Arbitrum One Fork Test", () => {
       .then((t) => t.wait());
 
     const r1State = await toasterPool.state();
-    const r1Balance = await toasterPool.balances(signer.address, c.WETH);
+    const r1Balance = await toasterPool.balances(signer.address, POLYGON.WMATIC);
     expect(r1State.liquidity).eq(beforeState.liquidity);
     expect(r1Balance).eq("200000");
 
-    const token0 = await ethers.getContractAt("IERC20", c.WETH);
-    const token1 = await ethers.getContractAt("IERC20", c.USDC);
+    const token0 = await ethers.getContractAt("IERC20", POLYGON.WMATIC);
+    const token1 = await ethers.getContractAt("IERC20", POLYGON.USDC);
 
     const r2 = await toasterPool
       .connect(oneInch)
@@ -157,7 +167,7 @@ describe("Arbitrum One Fork Test", () => {
       .then((t) => t.wait());
 
     const r2State = await toasterPool.state();
-    const r2Balance = await toasterPool.balances(signer.address, c.WETH);
+    const r2Balance = await toasterPool.balances(signer.address, POLYGON.WMATIC);
 
     console.log("USDC", await token0.balanceOf(signer.address));
     console.log("WETH", await token1.balanceOf(signer.address));

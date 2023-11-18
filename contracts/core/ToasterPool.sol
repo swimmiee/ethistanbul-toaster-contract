@@ -43,7 +43,7 @@ contract ToasterPool is
     IToasterStrategy public immutable strategy;
     address public immutable _1inch;
     
-    mapping(address => uint128) userShare;
+    mapping(address => uint128) public userShare;
     mapping(address => mapping(address => uint)) public balances;
     bool public override locked;
 
@@ -99,6 +99,7 @@ contract ToasterPool is
                 amount1
             );
         }
+        
         SafeERC20.safeApprove(token0, address(positionManager), type(uint).max);
         SafeERC20.safeApprove(token1, address(positionManager), type(uint).max);
         SafeERC20.safeApprove(token0, address(pool), type(uint).max);
@@ -328,20 +329,6 @@ contract ToasterPool is
             balances[maker][quoteToken] += takingAmount;
             return;
         }
-
-        // if (maker == address(this)) {
-        //     require(locked == true, "UL");
-
-        //     (int24 newTickLower, int24 newTickUpper) = abi.decode(
-        //         interactionData,
-        //         (int24, int24)
-        //     );
-
-        //     _mint(newTickLower, newTickUpper);
-
-        //     locked = false;
-        // }
-        // maker != address(this)
         uint quoteAmount = balances[maker][quoteToken] + takingAmount;
         balances[maker][quoteToken] = 0;
 
@@ -443,10 +430,6 @@ contract ToasterPool is
     function lock() external override {
         require(address(strategy) == msg.sender, "NOT STRATEGY");
         locked = true;
-    }
-
-    function setPeriod(uint24 _period) external onlyOwner {
-        period = _period;
     }
 
     function uniswapV3SwapCallback(

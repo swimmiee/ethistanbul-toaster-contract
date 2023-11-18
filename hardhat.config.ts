@@ -34,9 +34,13 @@ const config: HardhatUserConfig = {
             // hardfork: "merge",
             // // If you want to do some forking set `enabled` to true
             forking: {
-                url: "https://arbitrum.llamarpc.com",
-                blockNumber: 151396608,
-                enabled: true,
+                // url: "https://arbitrum.llamarpc.com",
+                // blockNumber: 151396608,
+               // enabled: true,
+                
+               enabled:true,
+               url: "https://polygon-mainnet.g.alchemy.com/v2/B0_K6Lnh59KS0VqekSSvFEpmfUrUhDGe",
+               blockNumber: 50097702
             },
             // chainId: 31337,
         },
@@ -55,12 +59,23 @@ const config: HardhatUserConfig = {
         },
         sepolia: {
             url: "https://eth-sepolia.public.blastapi.io",
-            accounts:[PRIVATE_KEY!]
+            accounts: [PRIVATE_KEY!],
+            gasPrice:8000000000
         },
         arbitrum: {
             url: "https://arbitrum.llamarpc.com",
             accounts: [PRIVATE_KEY!],
         },
+        linea: {
+            url: "https://linea.drpc.org",
+            accounts:[PRIVATE_KEY!],
+        },
+
+        polygon: {
+            url: "https://polygon-mainnet.g.alchemy.com/v2/B0_K6Lnh59KS0VqekSSvFEpmfUrUhDGe",
+            accounts: [PRIVATE_KEY!],
+            gasPrice:50 * 10 ** 9
+        }
     },
     contractSizer: {
         runOnCompile: true,

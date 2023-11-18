@@ -25,7 +25,7 @@ interface IToasterPool {
     function decreaseLiqduidity(address user, uint128 decreasedShare)external;
     
     function reinvest() external;
-    // function userShareOf(address user) external view returns (uint share, uint liquidity, uint amount0, uint amount1);
+    
     function rebalance(int24 tickLower, int24 tickUpper) external;
     function pool() external view returns (IUniswapV3Pool);
     function lock() external;

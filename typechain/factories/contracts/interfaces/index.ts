@@ -2,6 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { IToasterPool__factory } from "./IToasterPool__factory";
-export { IToasterPoolDeployer__factory } from "./IToasterPoolDeployer__factory";
-export { IToasterRouter__factory } from "./IToasterRouter__factory";
 export { IZapCalculator__factory } from "./IZapCalculator__factory";

@@ -92,7 +92,7 @@ contract ToasterStrategy is Ownable,FunctionsClient,IToasterStrategy, Automation
 
         require(IToasterPool(_toaster).locked(), "NOT LOCKED");
 
-        IToasterPool(_toaster).rebalance(tickLower, tickUpper); // will be unlocked
+        // IToasterPool(_toaster).rebalance(tickLower, tickUpper); // will be unlocked
         emit Response(requestId, response, err);
     }
 
