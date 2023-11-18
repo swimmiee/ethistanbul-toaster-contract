@@ -10,46 +10,48 @@ import "./tasks"
 
 dotenv.config()
 
+const COMPILER_SETTINGS = {
+    optimizer: {
+        enabled: true,
+        runs: 1000000,
+    },
+    metadata: {
+        bytecodeHash: "none",
+    },
+}
+
 const MAINNET_RPC_URL =
     process.env.MAINNET_RPC_URL ||
     process.env.ALCHEMY_MAINNET_RPC_URL ||
     "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
 const POLYGON_MAINNET_RPC_URL =
     process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
-const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
-// optional
-const MNEMONIC = process.env.MNEMONIC || "Your mnemonic"
-const FORKING_BLOCK_NUMBER = process.env.FORKING_BLOCK_NUMBER
-
-// Your API key for Etherscan, obtain one at https://etherscan.io/
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
-const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "Your polygonscan API key"
 
 const config: HardhatUserConfig = {
     defaultNetwork: "hardhat",
     networks: {
         hardhat: {
-            hardfork: "merge",
-            // If you want to do some forking set `enabled` to true
+            chainId: 1337,
             forking: {
-                url: MAINNET_RPC_URL,
-                blockNumber: Number(FORKING_BLOCK_NUMBER),
-                enabled: false,
+                url: "https://optimism.llamarpc.com",
+                blockNumber: 112350976,
             },
-            chainId: 31337,
+            // accounts: [
+            //   {
+            //     privateKey: PK,
+            //     balance: "10000000000000000000000",
+            //   },
+            //   {
+            //     // known private key
+            //     privateKey:
+            //       "0xdf57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e",
+            //     balance: "10000000000000000000000",
+            //   },
+            // ],
         },
         localhost: {
             chainId: 31337,
-        },
-        sepolia: {
-            url: SEPOLIA_RPC_URL !== undefined ? SEPOLIA_RPC_URL : "",
-            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-            //   accounts: {
-            //     mnemonic: MNEMONIC,
-            //   },
-            saveDeployments: true,
-            chainId: 11155111,
         },
         mainnet: {
             url: MAINNET_RPC_URL,
@@ -60,28 +62,6 @@ const config: HardhatUserConfig = {
             saveDeployments: true,
             chainId: 1,
         },
-        polygon: {
-            url: POLYGON_MAINNET_RPC_URL,
-            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-            saveDeployments: true,
-            chainId: 137,
-        },
-    },
-    etherscan: {
-        // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
-        apiKey: {
-            // npx hardhat verify --list-networks
-            sepolia: ETHERSCAN_API_KEY,
-            mainnet: ETHERSCAN_API_KEY,
-            polygon: POLYGONSCAN_API_KEY,
-        },
-    },
-    gasReporter: {
-        enabled: process.env.REPORT_GAS !== undefined,
-        currency: "USD",
-        outputFile: "gas-report.txt",
-        noColors: true,
-        // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
     },
     contractSizer: {
         runOnCompile: false,
@@ -98,16 +78,29 @@ const config: HardhatUserConfig = {
     },
     solidity: {
         compilers: [
+            { version: "0.7.5" },
+            { version: "0.7.6" },
             {
                 version: "0.8.7",
+                ...COMPILER_SETTINGS,
             },
             {
                 version: "0.6.6",
+                ...COMPILER_SETTINGS,
             },
             {
                 version: "0.4.24",
+                ...COMPILER_SETTINGS,
             },
         ],
+        overrides: {
+            "@uniswap/v3-core/contracts/libraries/TickBitmap.sol": {
+                version: "0.7.5",
+            },
+            "@uniswap/v3-periphery/contracts/libraries/PoolAddress.sol": {
+                version: "0.7.5",
+            },
+        },
     },
     mocha: {
         timeout: 200000, // 200 seconds max for running tests
