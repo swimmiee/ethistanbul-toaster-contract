@@ -21,10 +21,7 @@ contract ToasterStrategy is Ownable,FunctionsClient,IToasterStrategy, Automation
     mapping(address => uint) public lastBlocks;
     event Response(bytes32 indexed requestId, bytes response, bytes err);
     constructor(address router) FunctionsClient(router) {}
-
     mapping(address => string) rangeStrategies;
-    
-
     /*****************
      *** REBALANCE ***
      *****************/

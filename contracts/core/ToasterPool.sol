@@ -103,12 +103,10 @@ contract ToasterPool is
                 amount1
             );
         }
-
         SafeERC20.safeApprove(token0, address(positionManager), type(uint).max);
         SafeERC20.safeApprove(token1, address(positionManager), type(uint).max);
         SafeERC20.safeApprove(token0, address(pool), type(uint).max);
         SafeERC20.safeApprove(token1, address(pool), type(uint).max);
-
         uint128 liquidity = _mint(tickLower, tickUpper);
         state.totalShare = liquidity;
     }
@@ -168,11 +166,9 @@ contract ToasterPool is
         require(s.tokenId != 0, "NOL");
         // collect fees and reinvest
         reinvest();
-
         uint reserve0 = IERC20(token0).balanceOf(address(this));
         uint reserve1 = IERC20(token1).balanceOf(address(this));
         (amount0, amount1) = zap(s.tickLower, s.tickUpper, reserve0, reserve1);
-
         (
             uint128 increasedLiquidity,
             uint investedAmount0,
@@ -401,28 +397,6 @@ contract ToasterPool is
     /********************/
     /** VIEW FUNCTIONS **/
     /********************/
-    // function userShareOf(
-    //     address user
-    // )
-    //     external
-    //     view
-    //     override
-    //     returns (uint share, uint liquidity, uint amount0, uint amount1)
-    // {
-    //     PoolState memory s = state;
-    //     share = userShare[user];
-    //     liquidity = (share * s.liquidity) / s.totalShare;
-
-    //     (uint160 sqrtRatioX96, , , , , , ) = pool.slot0();
-    //     (uint total0, uint total1) = PositionValue.total(
-    //         positionManager,
-    //         s.liquidity,
-    //         sqrtRatioX96
-    //     );
-
-    //     amount0 = (total0 * share) / s.totalShare;
-    //     amount1 = (total1 * share) / s.totalShare;
-    // }
     function approveMax(address token, address spender) public {
         SafeERC20.safeApprove(IERC20(token), spender, 0);
         SafeERC20.safeApprove(IERC20(token), spender, type(uint).max);
@@ -439,11 +413,9 @@ contract ToasterPool is
         int24 newTickLower,
         int24 newTickUpper
     ) external override {
-        // require(address(strategy) == msg.sender, "NOT STRATEGY");
+        require(address(strategy) == msg.sender, "NOT STRATEGY");
         require(locked == true, "UL");
         PoolState memory s = state;
-        // require(s.tokenId != 0, "NOL");
-
         positionManager.decreaseLiquidity(
             INonfungiblePositionManager.DecreaseLiquidityParams({
                 tokenId: s.tokenId,

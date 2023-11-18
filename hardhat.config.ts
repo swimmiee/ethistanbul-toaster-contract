@@ -27,7 +27,6 @@ const MAINNET_RPC_URL =
 const POLYGON_MAINNET_RPC_URL =
     process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
 const PRIVATE_KEY = process.env.PRIVATE_KEY
-const FORKING_BLOCK_NUMBER = process.env.FORKING_BLOCK_NUMBER
 const config: HardhatUserConfig = {
     defaultNetwork: "hardhat",
     networks: {
@@ -54,10 +53,19 @@ const config: HardhatUserConfig = {
             saveDeployments: true,
             chainId: 1,
         },
+        sepolia: {
+            url: "https://eth-sepolia.public.blastapi.io",
+            accounts:[PRIVATE_KEY!]
+        },
+        arbitrum: {
+            url: "https://arbitrum.llamarpc.com",
+            accounts: [PRIVATE_KEY!],
+        },
     },
     contractSizer: {
-        runOnCompile: false,
-        only: ["APIConsumer", "KeepersCounter", "PriceConsumerV3", "RandomNumberConsumer"],
+        runOnCompile: true,
+        only: ["APIConsumer", "KeepersCounter", "PriceConsumerV3", "RandomNumberConsumer","ZapCalculator","ToasterPool","ToasterStrategy"],
+        strict:true
     },
     namedAccounts: {
         deployer: {
