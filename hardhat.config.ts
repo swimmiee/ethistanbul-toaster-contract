@@ -34,8 +34,8 @@ const config: HardhatUserConfig = {
         hardhat: {
             chainId: 1337,
             forking: {
-                url: "https://optimism.llamarpc.com",
-                blockNumber: 112350976,
+                url: "https://arbitrum.llamarpc.com",
+                blockNumber: 151396608,
             },
             // accounts: [
             //   {
