@@ -31,19 +31,7 @@ describe("Arbitrum One Fork Test", () => {
   };
   
   before("Deploy", async () => {
-    await network.provider.request({
-        method: 'hardhat_reset',
-        params: [
-            {
-                forking: {
-                    url: "https://arbitrum.llamarpc.com",
-                    blockNumber: 151396608,
-                    enabled: true,
-                    ignoreUnknownTxType: true,
-                },
-            },
-        ],
-    })
+    
     const signers = await ethers.getSigners();
     signer = signers[0];
     taker = signers[1];

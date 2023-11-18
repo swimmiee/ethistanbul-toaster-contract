@@ -34,11 +34,11 @@ const config: HardhatUserConfig = {
        hardhat: {
             // hardfork: "merge",
             // // If you want to do some forking set `enabled` to true
-            // forking: {
-            //     url: MAINNET_RPC_URL,
-            //     blockNumber: Number(FORKING_BLOCK_NUMBER),
-            //     enabled: false,
-            // },
+            forking: {
+                url: "https://arbitrum.llamarpc.com",
+                blockNumber: 151396608,
+                enabled: true,
+            },
             // chainId: 31337,
         },
         
