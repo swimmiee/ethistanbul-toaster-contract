@@ -1,15 +1,16 @@
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
 import { BigNumber } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { IUniswapV3Pool, ToasterPool } from "../typechain-types";
+
 import {
   impersonateAccount,
   setBalance,
 } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
-import { deployToasterPool, deployZap } from "../scripts/deploy";
-import makeWETH from "../scripts/utils/makeWETH";
-import approveToken from "../scripts/utils/approve";
+import { deployToasterPool, deployZap } from "../../scripts/deploy";
+import makeWETH from "../../scripts/utils/makeWETH";
+import approveToken from "../../scripts/utils/approve";
+import { IUniswapV3Pool, ToasterPool } from "../../typechain";
 
 const { parseEther, formatEther, parseUnits, formatUnits } = ethers.utils;
 
@@ -28,8 +29,21 @@ describe("Arbitrum One Fork Test", () => {
     MATIC_ROUTER: "0xdc2AAF042Aeff2E68B3e8E33F19e4B9fA7C73F10",
     SWAP_ROUTER: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
   };
-
+  
   before("Deploy", async () => {
+    await network.provider.request({
+        method: 'hardhat_reset',
+        params: [
+            {
+                forking: {
+                    url: "https://arbitrum.llamarpc.com",
+                    blockNumber: 151396608,
+                    enabled: true,
+                    ignoreUnknownTxType: true,
+                },
+            },
+        ],
+    })
     const signers = await ethers.getSigners();
     signer = signers[0];
     taker = signers[1];

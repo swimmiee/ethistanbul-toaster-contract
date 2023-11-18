@@ -1,5 +1,6 @@
 import { ethers, network } from "hardhat";
 import { updateConfig } from "./utils/updateConfig";
+import { ToasterPool, ToasterPool__factory } from "../typechain";
 
 const MANAGER = "0xC36442b4a4522E871399CD717aBDD847Ab11FE88"; //
 const ARBI_USDC_WETH_POOL = "0xc473e2aEE3441BF9240Be85eb122aBB059A3B57c"; //arbitrum pool
@@ -20,7 +21,7 @@ export const deployToasterPool = async (
   _1inch: string,
   router: string
 ) => {
-  const toaster_f = await ethers.getContractFactory("ToasterPool");
+  const toaster_f:ToasterPool__factory = await ethers.getContractFactory("ToasterPool");
   const toaster = await toaster_f
     .deploy(zap, manager, pool, _1inch, router)
     .then((tx) => tx.deployed());

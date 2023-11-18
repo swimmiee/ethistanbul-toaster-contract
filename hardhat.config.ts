@@ -27,29 +27,21 @@ const MAINNET_RPC_URL =
 const POLYGON_MAINNET_RPC_URL =
     process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
 const PRIVATE_KEY = process.env.PRIVATE_KEY
-
+const FORKING_BLOCK_NUMBER = process.env.FORKING_BLOCK_NUMBER
 const config: HardhatUserConfig = {
     defaultNetwork: "hardhat",
     networks: {
-        hardhat: {
-            chainId: 1337,
-            forking: {
-                url: "https://arbitrum.llamarpc.com",
-                blockNumber: 151396608,
-            },
-            // accounts: [
-            //   {
-            //     privateKey: PK,
-            //     balance: "10000000000000000000000",
-            //   },
-            //   {
-            //     // known private key
-            //     privateKey:
-            //       "0xdf57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e",
-            //     balance: "10000000000000000000000",
-            //   },
-            // ],
+       hardhat: {
+            // hardfork: "merge",
+            // // If you want to do some forking set `enabled` to true
+            // forking: {
+            //     url: MAINNET_RPC_URL,
+            //     blockNumber: Number(FORKING_BLOCK_NUMBER),
+            //     enabled: false,
+            // },
+            // chainId: 31337,
         },
+        
         localhost: {
             chainId: 31337,
         },
