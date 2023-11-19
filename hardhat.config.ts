@@ -92,6 +92,7 @@ const config: HardhatUserConfig = {
     etherscan: {
         apiKey: {
             scroll_sepolia: process.env.SCROLL_API!,
+            polygon_zk: process.env.POLYGON_ZK_API!,
         },
         customChains: [
             {
@@ -100,6 +101,14 @@ const config: HardhatUserConfig = {
                 urls: {
                     apiURL: "https://sepolia-blockscout.scroll.io/api",
                     browserURL: "https://sepolia-blockscout.scroll.io/",
+                },
+            },
+            {
+                network: "polygon_zk",
+                chainId: 1101,
+                urls: {
+                    apiURL: "https://api-zkevm.polygonscan.com/api",
+                    browserURL: "https://api-zkevm.polygonscan.io",
                 },
             },
         ],
