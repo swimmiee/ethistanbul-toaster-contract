@@ -27,6 +27,10 @@ const LINEA = {
   MANAGER: ethers.constants.AddressZero, // pancakeswap
   LINK_ROUTER:ethers.constants.AddressZero
 }
+
+const SCROLL = {
+
+}
 export const deployZap = async () : ZapCalculator => {
   const zap_f:ZapCalculator__factory = await ethers.getContractFactory("ZapCalculator");
   return zap_f.deploy().then((tx) => tx.deployed());
@@ -98,29 +102,29 @@ async function main() {
     zap.address,
     false
   );
-  const strategy = await deployStrategy(POLYGON.LINK_ROUTER);
-  updateConfig(
-    `./config/${network.name}.json`,
-    "TOASTER_STRATEGY",
-    strategy.address,
-    false
-  );
+  // const strategy = await deployStrategy(POLYGON.LINK_ROUTER);
+  // updateConfig(
+  //   `./config/${network.name}.json`,
+  //   "TOASTER_STRATEGY",
+  //   strategy.address,
+  //   false
+  // );
   
-  const toaster = await deployToasterPool(
-    POLYGON.ZAP,
-    POLYGON.MANAGER,
-    POLYGON.USDC_WMATIC_POOL,
-    POLYGON.ONE_INCH,
-    POLYGON.STRATEGY
-  )
-  updateConfig(
-    `./config/${network.name}.json`,
-    "TOASTER_USDC_WETH_POOL",
-    toaster.address,
-    false
-  );
+  // const toaster = await deployToasterPool(
+  //   POLYGON.ZAP,
+  //   POLYGON.MANAGER,
+  //   POLYGON.USDC_WMATIC_POOL,
+  //   POLYGON.ONE_INCH,
+  //   POLYGON.STRATEGY
+  // )
+  // updateConfig(
+  //   `./config/${network.name}.json`,
+  //   "TOASTER_USDC_WETH_POOL",
+  //   toaster.address,
+  //   false
+  // );
   
-  await init(toaster.address, POLYGON.USDC_WMATIC_POOL);
+  // await init(toaster.address, POLYGON.USDC_WMATIC_POOL);
   
 }
 

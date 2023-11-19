@@ -42,6 +42,7 @@ export interface ToasterStrategyInterface extends utils.Interface {
     "requests(address)": FunctionFragment;
     "setPeriod(address,uint16)": FunctionFragment;
     "setRangeStrategy(address,string)": FunctionFragment;
+    "setTokenId(address,uint256)": FunctionFragment;
     "subscriptionIds(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updateRequest(address,bytes,uint64,uint32,bytes32)": FunctionFragment;
@@ -62,6 +63,7 @@ export interface ToasterStrategyInterface extends utils.Interface {
       | "requests"
       | "setPeriod"
       | "setRangeStrategy"
+      | "setTokenId"
       | "subscriptionIds"
       | "transferOwnership"
       | "updateRequest"
@@ -118,6 +120,10 @@ export interface ToasterStrategyInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setTokenId",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "subscriptionIds",
     values: [PromiseOrValue<string>]
   ): string;
@@ -167,6 +173,7 @@ export interface ToasterStrategyInterface extends utils.Interface {
     functionFragment: "setRangeStrategy",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setTokenId", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "subscriptionIds",
     data: BytesLike
@@ -326,6 +333,12 @@ export interface ToasterStrategy extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setTokenId(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     subscriptionIds(
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -410,6 +423,12 @@ export interface ToasterStrategy extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setTokenId(
+    token: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   subscriptionIds(
     arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -489,6 +508,12 @@ export interface ToasterStrategy extends BaseContract {
     setRangeStrategy(
       toaster: PromiseOrValue<string>,
       source: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setTokenId(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -609,6 +634,12 @@ export interface ToasterStrategy extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setTokenId(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     subscriptionIds(
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -689,6 +720,12 @@ export interface ToasterStrategy extends BaseContract {
     setRangeStrategy(
       toaster: PromiseOrValue<string>,
       source: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTokenId(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

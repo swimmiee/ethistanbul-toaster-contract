@@ -80,14 +80,29 @@ const config: HardhatUserConfig = {
             url: "https://spicy-rpc.chiliz.com/",
             accounts: [PRIVATE_KEY!],
         },
-        scroll: {
-            url: "https://rpc.ankr.com/scroll",
+        scroll_sepolia: {
+            url: "https://rpc.ankr.com/scroll_sepolia_testnet",
             accounts: [PRIVATE_KEY!],
         },
         polygon_zk: {
             url: "https://rpc.ankr.com/polygon_zkevm",
             accounts: [PRIVATE_KEY!],
         },
+    },
+    etherscan: {
+        apiKey: {
+            scroll_sepolia: process.env.SCROLL_API!,
+        },
+        customChains: [
+            {
+                network: "scroll_sepolia",
+                chainId: 534351,
+                urls: {
+                    apiURL: "https://sepolia-blockscout.scroll.io/api",
+                    browserURL: "https://sepolia-blockscout.scroll.io/",
+                },
+            },
+        ],
     },
     contractSizer: {
         runOnCompile: true,
