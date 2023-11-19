@@ -6,6 +6,7 @@ import {Ownable}from "@openzeppelin/contracts/access/Ownable.sol";
 import {FunctionsClient,FunctionsRequest }from "../external/chainlink/FunctionClient.sol";
 import {AutomationCompatibleInterface} from "../external/chainlink/AutomationCompatibleInterface.sol";
 
+import {IUniswapV3Pool} from "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import {Strings}from"@openzeppelin/contracts/utils/Strings.sol";
 import {IToasterPool} from "../interfaces/IToasterPool.sol";
 import {IToasterStrategy} from "../interfaces/IToasterStrategy.sol";
@@ -22,6 +23,7 @@ contract ToasterStrategy is Ownable,FunctionsClient,IToasterStrategy, Automation
     event Response(bytes32 indexed requestId, bytes response, bytes err);
     constructor(address router) FunctionsClient(router) {}
     mapping(address => string) rangeStrategies;
+    mapping(address => uint) tokenIds;
     /*****************
      *** REBALANCE ***
      *****************/
@@ -62,10 +64,16 @@ contract ToasterStrategy is Ownable,FunctionsClient,IToasterStrategy, Automation
     function _requestRebalance(address _toaster) internal returns (bytes32 requestId) {
         
         FunctionsRequest.Request memory req;
-        address _pool = address(IToasterPool(_toaster).pool());
+        IUniswapV3Pool _pool =IToasterPool(_toaster).pool();
+        uint token0Id = tokenIds[_pool.token0()];
+        uint token1Id = tokenIds[_pool.token1()];
+        uint tickSpacing = uint(_pool.tickSpacing());
+
         req._initializeRequestForInlineJavaScript(rangeStrategies[_toaster]); // Initialize the request with JS code
-        string[] memory args = new string[](1);
-        args[0] = uint256(_pool).toString();
+        string[] memory args = new string[](2);
+        args[0] = token0Id.toString();
+        args[1] = token1Id.toString();
+        args[2] = tickSpacing.toString();
         req._setArgs(args);
         lastRequestIds[_toaster] = _sendRequest(
             req._encodeCBOR(),
@@ -122,5 +130,9 @@ contract ToasterStrategy is Ownable,FunctionsClient,IToasterStrategy, Automation
 
     function setPeriod(address toaster, uint16 period) external onlyOwner {
         periods[toaster] = period;
+    }
+
+    function setTokenId(address token, uint tokenId) external onlyOwner {
+        tokenIds[token] = tokenId;
     }
 }

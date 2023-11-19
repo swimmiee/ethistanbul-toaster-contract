@@ -22,11 +22,11 @@ const makeRequestMumbai = async () => {
     const linkTokenAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB"
     const donId = "0x66756e2d706f6c79676f6e2d6d756d6261692d31000000000000000000000000"
     const explorerUrl = "https://mumbai.polygonscan.com"
-    const POLY_USDC_WETH_POOL = "0x2DB87C4831B2fec2E35591221455834193b50D1B";
+    
     // Initialize functions settings
     const source = fs.readFileSync(path.resolve(__dirname, "source.js")).toString()
 
-    const args = [POLY_USDC_WETH_POOL]
+    const args = []
     const gasLimit = 300000
 
     // Initialize ethers signer and provider to interact with the contracts onchain
