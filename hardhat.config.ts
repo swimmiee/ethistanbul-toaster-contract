@@ -84,6 +84,10 @@ const config: HardhatUserConfig = {
             url: "https://rpc.ankr.com/scroll",
             accounts: [PRIVATE_KEY!],
         },
+        polygon_zk: {
+            url: "https://rpc.ankr.com/polygon_zkevm",
+            accounts: [PRIVATE_KEY!],
+        },
     },
     contractSizer: {
         runOnCompile: true,
